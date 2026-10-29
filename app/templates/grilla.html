@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Movimientos</h1>
+<p><a href="/movimientos/nuevo" role="button">Agregar movimiento</a></p>
+<table>
+  <thead>
+    <tr><th>Descripción</th><th>Monto</th><th>Tipo</th><th>Clasificación</th><th>Fecha</th></tr>
+  </thead>
+  <tbody>
+  {% for m in pagina.filas %}
+    <tr data-id="{{ m.id }}" hx-get="/movimientos/{{ m.id }}/editar" hx-trigger="dblclick"
+        hx-target="body" hx-push-url="true" title="Doble click para modificar">
+      <td>{{ m.descripcion }}</td>
+      <td class="monto">{{ m.monto | monto }}</td>
+      <td>{{ m.tipo | capitalize }}</td>
+      <td>{{ m.clasificacion }}</td>
+      <td>{{ m.fecha | fecha }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if pagina.total > 1 %}
+<nav>
+  {% if pagina.numero > 1 %}<a href="/movimientos?pagina={{ pagina.numero - 1 }}">« Anterior</a>{% endif %}
+  Página {{ pagina.numero }} de {{ pagina.total }}
+  {% if pagina.numero < pagina.total %}<a href="/movimientos?pagina={{ pagina.numero + 1 }}">Siguiente »</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

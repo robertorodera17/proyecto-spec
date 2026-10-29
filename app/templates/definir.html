@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}Definir contraseña{% endblock %}
+{% block contenido %}
+<h1>Definí tu contraseña, {{ sigla }}</h1>
+<p>Es tu primer ingreso. La contraseña no se puede cambiar ni recuperar después: anotala.</p>
+<form method="post" action="/login/definir">
+  <input type="hidden" name="sigla" value="{{ sigla }}">
+  <label>Contraseña (al menos 8 caracteres) <input type="password" name="password" autofocus required></label>
+  <label>Repetí la contraseña <input type="password" name="password2" required></label>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <p><button type="submit">Guardar e ingresar</button></p>
+</form>
+{% endblock %}

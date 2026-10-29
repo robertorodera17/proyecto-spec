@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titulo %}{{ "Modificar" if id else "Agregar" }} movimiento{% endblock %}
+{% block contenido %}
+<h1>{{ "Modificar" if id else "Agregar" }} movimiento</h1>
+<form method="post" action="{{ '/movimientos/%d' % id if id else '/movimientos' }}">
+  <label>Descripción
+    {% if id %}
+    <input type="text" name="descripcion" value="{{ valores.descripcion }}" maxlength="250" autofocus>
+    {% else %}
+    <input type="text" name="descripcion" value="{{ valores.descripcion }}" maxlength="250" autofocus
+           hx-get="/movimientos/clasificacion" hx-trigger="input changed delay:300ms"
+           hx-target="#campo-clasificacion" hx-include="[name=tipo],[name=clasificacion]">
+    {% endif %}
+  </label>
+  {% with campo="descripcion" %}{% include "_error.html" %}{% endwith %}
+
+  {% if id %}
+  <input type="hidden" name="tipo_original" value="{{ original.tipo }}">
+  <input type="hidden" name="clasificacion_original" value="{{ original.clasificacion }}">
+  {% endif %}
+  <label>Tipo de movimiento
+    <select name="tipo" hx-get="/movimientos/clasificacion" hx-trigger="change" hx-target="#campo-clasificacion"
+            hx-include="{{ '[name=clasificacion],[name=tipo_original],[name=clasificacion_original]' if id else '[name=clasificacion],[name=descripcion]' }}">
+      <option value="">— Elegí el tipo —</option>
+      {% for t in tipos %}
+      <option value="{{ t.value }}"{% if t.value == valores.tipo %} selected{% endif %}>{{ t.etiqueta }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  {% with campo="tipo" %}{% include "_error.html" %}{% endwith %}
+
+  <label>Monto
+    <input type="text" name="monto" value="{{ valores.monto }}" inputmode="numeric">
+  </label>
+  {% with campo="monto" %}{% include "_error.html" %}{% endwith %}
+
+  <label>Clasificación
+    <span id="campo-clasificacion">
+      {% with seleccion=valores.clasificacion %}{% include "_clasificacion.html" %}{% endwith %}
+    </span>
+  </label>
+  {% with campo="clasificacion" %}{% include "_error.html" %}{% endwith %}
+
+  <label>Fecha
+    <input type="date" name="fecha" value="{{ valores.fecha }}">
+  </label>
+  {% with campo="fecha" %}{% include "_error.html" %}{% endwith %}
+
+  <p>
+    <button type="submit">Guardar</button>
+    {% if id %}
+    <button type="button" hx-post="/movimientos/{{ id }}/eliminar" hx-confirm="¿Eliminar este movimiento?"
+            hx-target="body">Eliminar</button>
+    {% endif %}
+    <a href="/movimientos">Cancelar</a>
+  </p>
+</form>
+{% endblock %}

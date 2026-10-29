@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  {# HTMX también muestra las respuestas de error (404, 409, 422) en lugar de ignorarlas. #}
+  <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":".*","swap":true}]}'>
+  <title>{% block titulo %}Movimientos{% endblock %}</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/htmx.min.js"></script>
+</head>
+<body>
+  {% if request.session.get("operador_id") %}
+  <form method="post" action="/logout" style="float:right">
+    <button type="submit">Cerrar sesión</button>
+  </form>
+  {% endif %}
+  {% block contenido %}{% endblock %}
+</body>
+</html>

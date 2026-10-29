@@ -1,0 +1,6 @@
+<select name="clasificacion" id="clasificacion">
+  <option value="">— Elegí una clasificación —</option>
+  {% for nombre in clasificaciones %}
+  <option value="{{ nombre }}"{% if nombre == seleccion %} selected{% endif %}>{{ nombre }}</option>
+  {% endfor %}
+</select>
